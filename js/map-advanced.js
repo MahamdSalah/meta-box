@@ -104,10 +104,20 @@ jQuery( function ( $ )
 			 */
 			$( window ).on( 'rwmb_map_refresh', function()
 			{
+				var zoom = that.map.getZoom(),
+					center = that.map.getCenter();
+
 				if ( that.map )
 				{
 					google.maps.event.trigger( that.map, 'resize' );
+					that.map.setZoom( zoom );
+					that.map.setCenter( center );
 				}
+			} );
+
+			//Refresh on meta box hide and show
+			$( document ).on( 'postbox-toggled', function() {
+			    $( window ).trigger( 'rwmb_map_refresh' );
 			} );
 		},
 
@@ -206,4 +216,5 @@ jQuery( function ( $ )
 	$( '.rwmb-map-advanced-field' ).each( update );
 	$( '.rwmb-input' )
 		.on( 'clone', '.rwmb-map-advanced-field', _.debounce( update, 100 ) );
+
 } );
